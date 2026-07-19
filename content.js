@@ -43,10 +43,32 @@
   }
 
   function handleRefreshClick(badge) {
+    console.log("[ClaudeUsageBadge] manual refresh triggered");
     badge.classList.add("cub-refreshing");
-    chrome.runtime.sendMessage({ type: "manual-refresh" }, () => {
+    try {
+      chrome.runtime.sendMessage({ type: "manual-refresh" }, () => {
+        badge.classList.remove("cub-refreshing");
+        if (chrome.runtime.lastError) {
+          // Most common cause: the extension was reloaded but this tab
+          // still runs the old, orphaned content script (its
+          // chrome.runtime port to the new background worker is dead).
+          // Reloading the page re-injects a fresh content script.
+          console.error(
+            "[ClaudeUsageBadge] manual refresh failed:",
+            chrome.runtime.lastError.message,
+            "(try reloading the claude.ai tab)"
+          );
+        } else {
+          console.log("[ClaudeUsageBadge] manual refresh acknowledged by background");
+        }
+      });
+    } catch (err) {
       badge.classList.remove("cub-refreshing");
-    });
+      console.error(
+        "[ClaudeUsageBadge] sendMessage threw - extension context invalidated, reload the page:",
+        err
+      );
+    }
   }
 
   function attachDragHandlers(badge) {
@@ -241,7 +263,9 @@
   }
 
   chrome.storage.onChanged.addListener((changes, area) => {
+    console.log("[ClaudeUsageBadge] storage changed:", area, changes);
     if (area === "local" && changes.usage) {
+      console.log("[ClaudeUsageBadge] storage updated, re-rendering");
       render(changes.usage.newValue);
     }
   });

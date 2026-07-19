@@ -30,12 +30,14 @@ chrome.runtime.onStartup.addListener(() => {
 
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === ALARM_NAME) {
+    debugLog("background poll fired");
     fetchUsage();
   }
 });
 
 chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
   if (msg && msg.type === "manual-refresh") {
+    debugLog("manual refresh message received");
     fetchUsage().then(() => sendResponse({ ok: true }));
     return true; // async response
   }
@@ -152,4 +154,5 @@ async function fetchUsage() {
 
 async function saveUsage(data) {
   await chrome.storage.local.set({ usage: data });
+  debugLog("storage.local usage updated:", data);
 }
