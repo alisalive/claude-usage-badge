@@ -103,13 +103,59 @@
   font-weight: 600;
 }
 
-#claude-usage-badge-widget .cub-reset,
-#claude-usage-badge-widget .cub-updated {
+#claude-usage-badge-widget .cub-reset {
   font-size: 9px;
   opacity: 0.55;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 220px;
+}
+
+#claude-usage-badge-widget .cub-updated-row {
+  align-items: center;
+  gap: 4px;
+}
+
+#claude-usage-badge-widget .cub-updated-text {
+  font-size: 9px;
+  opacity: 0.55;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 190px;
+}
+
+#claude-usage-badge-widget .cub-refresh-icon {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  font-size: 11px;
+  line-height: 1;
+  border-radius: 50%;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.15s ease, background 0.15s ease;
+}
+
+#claude-usage-badge-widget .cub-refresh-icon:hover {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.08);
+}
+
+#claude-usage-badge-widget .cub-refresh-icon.cub-spin {
+  opacity: 1;
+  animation: cub-spin-anim 0.7s linear infinite;
+}
+
+@keyframes cub-spin-anim {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 #claude-usage-badge-widget .cub-warn {
@@ -148,5 +194,9 @@
     background: rgba(30, 30, 32, 0.85);
     color: #eee;
     border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  #claude-usage-badge-widget .cub-refresh-icon:hover {
+    background: rgba(255, 255, 255, 0.15);
   }
 }
