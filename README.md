@@ -1,10 +1,12 @@
 # Claude Usage Badge
 
+![License](https://img.shields.io/badge/license-MIT-blue.svg) ![Manifest](https://img.shields.io/badge/manifest-v3-green.svg)
+
 A small Chrome (Manifest V3) browser extension that shows your own **claude.ai**
 5-hour session usage and weekly usage limit as a floating badge on the page —
 no need to open Settings → Usage manually.
 
-![screenshot placeholder](docs/screenshot.png)
+![Claude Usage Badge screenshot](docs/screenshot.png)
 
 ## Features
 
@@ -63,3 +65,7 @@ no need to open Settings → Usage manually.
 ## License
 
 MIT — see [LICENSE](LICENSE).
+
+## Author
+
+Built by [Shikhali Jamalzade](https://github.com/alisalive) — independent security researcher.
