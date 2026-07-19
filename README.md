@@ -6,7 +6,7 @@ A small Chrome (Manifest V3) browser extension that shows your own **claude.ai**
 5-hour session usage and weekly usage limit as a floating badge on the page —
 no need to open Settings → Usage manually.
 
-![Claude Usage Badge screenshot](docs/screenshot.png)
+![Claude Usage Badge in action](screenshots/claudeusagelimit.png)
 
 ## Features
 
@@ -17,6 +17,8 @@ no need to open Settings → Usage manually.
 - Color warning: turns yellow at 80%+ and red at 95%+ usage
 - Click the badge to force an immediate refresh
 - Background polling every 3 minutes via `chrome.alarms`
+
+![Badge close-up](screenshots/claudeusagelimitv2.png)
 
 ## Installation (Load unpacked)
 

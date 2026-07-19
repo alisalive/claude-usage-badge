@@ -17,7 +17,7 @@
     badge.title = "Click to refresh usage data \u00b7 Drag to move";
     badge.innerHTML = `
       <span class="cub-warn" data-field="warn">⚠</span>
-      <span class="cub-toggle" data-field="toggle" title="Collapse/expand">–</span>
+      <span class="cub-toggle" data-field="toggle" title="Collapse/expand">\u2212</span>
       <div class="cub-body" data-field="body">
         <div class="cub-row cub-session" data-field="session-row">
           <span class="cub-label">Session</span>
@@ -56,22 +56,32 @@
     let startY = 0;
     let startTop = 0;
     let startLeft = 0;
+    let activePointerId = null;
 
-    badge.addEventListener("mousedown", (e) => {
+    // Pointer Events + setPointerCapture: once the drag starts, all
+    // subsequent pointermove/pointerup events for this pointer are routed
+    // directly to `badge`, regardless of what else is on the page. This
+    // avoids relying on document-level listeners, which can be intercepted
+    // by claude.ai's own event handling before they ever reach us.
+    badge.addEventListener("pointerdown", (e) => {
       if (e.target.closest('[data-field="toggle"]')) return;
+      if (e.button !== 0) return;
       dragging = true;
       moved = false;
+      activePointerId = e.pointerId;
       startX = e.clientX;
       startY = e.clientY;
       const rect = badge.getBoundingClientRect();
       startTop = rect.top;
       startLeft = rect.left;
       badge.classList.add("cub-dragging");
+      badge.setPointerCapture(activePointerId);
+      console.log("[ClaudeUsageBadge] drag started");
       e.preventDefault();
     });
 
-    document.addEventListener("mousemove", (e) => {
-      if (!dragging) return;
+    badge.addEventListener("pointermove", (e) => {
+      if (!dragging || e.pointerId !== activePointerId) return;
       const dx = e.clientX - startX;
       const dy = e.clientY - startY;
       if (Math.abs(dx) > DRAG_THRESHOLD_PX || Math.abs(dy) > DRAG_THRESHOLD_PX) {
@@ -90,16 +100,19 @@
       badge.style.right = "auto";
     });
 
-    document.addEventListener("mouseup", () => {
-      if (!dragging) return;
+    badge.addEventListener("pointerup", (e) => {
+      if (!dragging || e.pointerId !== activePointerId) return;
       dragging = false;
       badge.classList.remove("cub-dragging");
+      badge.releasePointerCapture(activePointerId);
+      console.log("[ClaudeUsageBadge] drag ended, moved:", moved);
 
       if (moved) {
         const rect = badge.getBoundingClientRect();
         chrome.storage.local.set({
           badgePosition: { top: rect.top, left: rect.left },
         });
+        console.log("[ClaudeUsageBadge] position saved:", rect.top, rect.left);
       } else {
         handleRefreshClick(badge);
       }
@@ -111,8 +124,9 @@
     toggleEl.addEventListener("click", (e) => {
       e.stopPropagation();
       const collapsed = badge.classList.toggle("cub-collapsed");
-      toggleEl.textContent = collapsed ? "+" : "–";
+      toggleEl.textContent = collapsed ? "+" : "\u2212";
       chrome.storage.local.set({ badgeCollapsed: collapsed });
+      console.log("[ClaudeUsageBadge] toggle clicked, collapsed:", collapsed);
     });
   }
 
