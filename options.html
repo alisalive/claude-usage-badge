@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Claude Usage Badge - Settings</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+        max-width: 480px;
+        margin: 32px auto;
+        color: #222;
+      }
+      h1 {
+        font-size: 16px;
+      }
+      p {
+        font-size: 13px;
+        line-height: 1.5;
+        color: #555;
+      }
+      input {
+        width: 100%;
+        padding: 8px;
+        font-size: 13px;
+        box-sizing: border-box;
+        margin-bottom: 8px;
+      }
+      button {
+        padding: 8px 14px;
+        font-size: 13px;
+        cursor: pointer;
+      }
+      #status {
+        font-size: 12px;
+        margin-top: 12px;
+        color: #555;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Claude Usage Badge - Settings</h1>
+    <p>
+      The organization ID is normally auto-detected from your claude.ai
+      "lastActiveOrg" cookie. Only set it manually here if auto-detection
+      fails (e.g. you belong to multiple organizations and want to pin a
+      specific one).
+    </p>
+    <input type="text" id="orgId" placeholder="e.g. 4c7224d2-da0d-4118-8417-0c16877abcc3" />
+    <button id="save">Save override</button>
+    <button id="clear">Clear override (use auto-detect)</button>
+    <div id="status"></div>
+    <script src="options.js"></script>
+  </body>
+</html>
